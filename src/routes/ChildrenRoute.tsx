@@ -6,6 +6,7 @@ import Contact from 'pages/Contact'
 import DetailProduct from 'pages/DetailProduct'
 import OrderCompleted from 'pages/OrderCompleted'
 import SignIn from 'pages/SignIn'
+import WishList from 'pages/wishList'
 import { TypeViewChildrenRoute } from 'types/Types'
 
 export const ChildrenRouteHome: TypeViewChildrenRoute[] = [
@@ -48,6 +49,14 @@ export const ChildrenRouteHome: TypeViewChildrenRoute[] = [
         icon: undefined,
         name: 'Cart',
         path: '/cart',
+        roles: ['user'],
+      },
+      {
+        collapse: false,
+        component: <WishList />,
+        icon: undefined,
+        name: 'wish-list',
+        path: '/wish-list',
         roles: ['user'],
       },
       {

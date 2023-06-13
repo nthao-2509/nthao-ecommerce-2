@@ -12,6 +12,8 @@ import IndexAdmin from 'pages/admin'
 import { TypeViewChildrenRoute } from 'types/Types'
 import { FiHome, FiUser } from 'react-icons/fi'
 import ManageProduct from 'components/salesman/ManageProduct'
+import ProductPortfolio from 'components/admin/manageProductPortfolio'
+import ManageProductAdmin from 'components/admin/manageProduct'
 export const ChildrenRouteAdmin: TypeViewChildrenRoute[] = [
   {
     collapse: false,
@@ -27,10 +29,30 @@ export const ChildrenRouteAdmin: TypeViewChildrenRoute[] = [
     collapse: false,
     component: <IndexManageUser />,
     icon: FiUser,
-    name: 'User Manage',
+    name: 'Quản lý người dùng',
     index: false,
     path: '/quan-ly-nguoi-dung',
     roles: ['admin'],
+    views: null,
+  },
+  {
+    collapse: false,
+    component: <ProductPortfolio />,
+    icon: FiUser,
+    name: 'Danh mục sản phẩm',
+    index: false,
+    path: '/quan-ly-danh-muc-san-pham',
+    roles: ['admin'],
+    views: null,
+  },
+  {
+    collapse: false,
+    component: <ManageProduct />,
+    icon: FiUser,
+    name: 'Sản phẩm',
+    index: false,
+    path: '/quan-ly-san-pham',
+    roles: ['admin', 'salesman'],
     views: null,
   },
   {

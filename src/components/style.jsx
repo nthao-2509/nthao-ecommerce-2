@@ -13,7 +13,7 @@ export const StyleHeader = styled.div`
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 99;
+  z-index: 99999999999;
   .header {
     display: flex;
     justify-content: space-between;
@@ -199,9 +199,9 @@ export const StyleNavbar = styled.div`
   position: fixed;
   top: 38px;
   width: 100%;
-  z-index: 999;
   background-color: ${Colors.white};
   font-weight: 600;
+  z-index: 999;
   .navbar {
     display: flex;
     align-items: center;

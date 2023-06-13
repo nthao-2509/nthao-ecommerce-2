@@ -1,6 +1,7 @@
 import { ColumnsType } from 'antd/es/table'
 import { Image } from 'antd'
 import { UrlServer } from 'config/UrlServer'
+import EditComponents from '../manageProduct/editComponents'
 
 export const columns: ColumnsType<any> = [
   {
@@ -18,5 +19,13 @@ export const columns: ColumnsType<any> = [
     title: 'Giá sản phẩm',
     dataIndex: 'priceProduct',
     key: 'priceProduct',
+  },
+  {
+    title: 'Thao tác',
+    dataIndex: 'edit',
+    key: 'edit',
+    render(value, record, index) {
+      return <EditComponents record={record} />
+    },
   },
 ]

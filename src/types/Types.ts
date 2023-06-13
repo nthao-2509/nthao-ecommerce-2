@@ -170,3 +170,36 @@ export type TypeCart = {
   quantity: number
   time: string
 }
+
+export interface Product {
+  address: string
+  detailProduct: string
+  idProduct: string
+  idUser: string
+  images: string[]
+  nameProduct: string
+  priceProduct: string
+  slug: string
+  thongSoKyThuat: {
+    dongSanPham: string
+    hangSanPham: string
+    namDangKy: string
+    tinhTrangBaoHang: number
+    xuatXu: string
+  }
+}
+export interface User {
+  idUser: string
+  message: string
+  role: string
+  token: string
+  userData: InformationUser
+}
+export interface InformationUser {
+  firstName: string
+  lastName: string
+  role: string
+  active: number
+  email: string
+  id: string
+}

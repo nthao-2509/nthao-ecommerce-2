@@ -16,25 +16,30 @@ import axios from 'axios'
 import { UrlServer } from 'config/UrlServer'
 import { FormatMoney } from 'format-money-js'
 import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from 'store'
+import { addToCart } from 'features/cart/cartSlice'
+import { addToWishList } from 'features/wishlist/wishListSlice'
 const formatter = new Intl.NumberFormat('vi', {
   style: 'currency',
   currency: 'VND',
 })
 const FeaturedProducts = () => {
-  const [dataProduct, setDataProduct] = React.useState<any>()
+  const { product: dataProduct } = useSelector((state: any) => state.product)
+  const cartT = useSelector((state: any) => state.cart)
 
-  const selectDataProduct = async () => {
-    const response = await axios.get('select-product')
-    setDataProduct(response.data.data)
-  }
-  React.useEffect(() => {
-    selectDataProduct()
-  }, [dataProduct?.length === 0])
   const customPagination = {
     clickable: true,
     renderBullet: function (index: any, className: any) {
       return '<span class="custom_pagination ' + className + '">' + '</span>'
     },
+  }
+  const dispatch = useDispatch<AppDispatch>()
+  const handleAddToCart = (product: any) => {
+    dispatch(addToCart(product))
+  }
+  const handleAddToWishList = (product: any) => {
+    dispatch(addToWishList(product))
   }
 
   return (
@@ -61,8 +66,8 @@ const FeaturedProducts = () => {
               <SwiperSlide>
                 <div className='cards__item' key={index}>
                   <div className='icon'>
-                    <i className='fa-solid fa-cart-shopping'></i>
-                    <i className='fa-regular fa-heart'></i>
+                    <i onClick={() => handleAddToCart(item)} className='fa-solid fa-cart-shopping'></i>
+                    <i onClick={() => handleAddToWishList(item)} className='fa-regular fa-heart'></i>
                   </div>
                   <div className='cards__item-image'>
                     <img
@@ -87,23 +92,8 @@ const FeaturedProducts = () => {
                     <div className='title'>
                       <h3>{item.nameProduct}</h3>
                     </div>
-                    {/* <div className='colors'>
-          {data?.colors?.map((color: string, indexColors: number) => (
-            <div
-              className='color'
-              key={indexColors}
-              style={{
-                backgroundColor: color,
-              }}
-            ></div>
-          ))}
-        </div> */}
-                    {/* <div className='code'>
-          <span>Code - {data.code}</span>
-        </div> */}
                     <div className='price'>
                       <span>{formatter.format(item.priceProduct)}</span>
-                      {/* <del>{data.old_price}</del> */}
                     </div>
                   </div>
                 </div>

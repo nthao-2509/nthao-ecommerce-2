@@ -41,7 +41,12 @@ const LeatestProducts = () => {
         </div>
         <div className='cards'>
           {dataFilterProduct?.map((item: any) => (
-            <Link to={`product/${item.slug}`}>
+            <Link
+              to={`product/${item.slug}`}
+              style={{
+                zIndex: 1,
+              }}
+            >
               <div className='cards__item' key={item.id}>
                 {item.sale && (
                   <div className='cards__item-sale'>

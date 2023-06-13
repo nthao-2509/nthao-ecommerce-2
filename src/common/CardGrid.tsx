@@ -1,20 +1,45 @@
 import { UrlServer } from 'config/UrlServer'
 import { formatter } from 'config/numberFormat'
+import { addToCart } from 'features/cart/cartSlice'
+import { addToWishList, removeWishList } from 'features/wishlist/wishListSlice'
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
+import { AppDispatch } from 'store'
 import { TypeDataProduct } from 'types/Types'
 
 type Props = {
   data: any
   key: number | string
+  wishList?: boolean
 }
 
-const CardGrid = ({ data, key }: Props) => {
+const CardGrid = ({ data, key, wishList = false }: Props) => {
+  const dispatch = useDispatch<AppDispatch>()
+
+  const handleAddToCart = (product: any) => {
+    dispatch(addToCart(product))
+  }
+  const handleAddToWishList = (product: any) => {
+    dispatch(addToWishList(product))
+  }
+  const handleMinusWishList = (product: any) => {
+    dispatch(removeWishList(product))
+  }
   return (
     <div className='cards__item' key={key}>
       <div className='icon'>
-        <i className='fa-solid fa-cart-shopping'></i>
-        <i className='fa-regular fa-heart'></i>
+        <i
+          onClick={() => {
+            handleAddToCart(data)
+          }}
+          className='fa-solid fa-cart-shopping'
+        ></i>
+        {wishList ? (
+          <i onClick={() => handleMinusWishList(data)} className='fa-solid fa-heart-circle-minus'></i>
+        ) : (
+          <i onClick={() => handleAddToWishList(data)} className='fa-regular fa-heart'></i>
+        )}
       </div>
       <div className='cards__item-image'>
         <img

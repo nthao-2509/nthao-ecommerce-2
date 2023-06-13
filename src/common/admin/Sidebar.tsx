@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
   IconButton,
   Avatar,
@@ -26,10 +26,11 @@ import { FiMenu, FiBell, FiChevronDown } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import { ReactText } from 'react'
 import { ChildrenRouteAdmin } from 'routes/ChidrenRouteAdmin'
-import { TypeRouteChildrenLv3, TypeViewChildrenRoute, TypeViewChildrenRouteAdmin } from 'types/Types'
-import { BsSearchHeartFill } from 'react-icons/bs'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import _ from 'lodash'
+import { useSelector } from 'react-redux'
+import Loading from 'common/Loading'
+import { User } from 'types/Types'
 interface LinkItemProps {
   name: string
   icon: IconType
@@ -45,20 +46,52 @@ interface LinkItemProps {
 
 export default function SidebarWithHeader() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
+  const { user, isSuccess, isLoading: isLoadingAuth } = useSelector((state: any) => state.auth)
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    if (!user || user.role === 'buyer') {
+      setTimeout(() => {
+        setIsLoading(false)
+        navigate('/')
+      }, 2000)
+    } else {
+      setIsLoading(false)
+    }
+  }, [user, navigate])
+
+  // if (isLoading) {
+  //   return <Loading />
+  // }
 
   return (
     <Box minH='100vh' bg={useColorModeValue('gray.100', 'gray.900')}>
-      <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
-      <Drawer autoFocus={false} isOpen={isOpen} placement='left' onClose={onClose} returnFocusOnClose={false} onOverlayClick={onClose} size='full'>
-        <DrawerContent>
-          <SidebarContent onClose={onClose} />
-        </DrawerContent>
-      </Drawer>
-      {/* mobilenav */}
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p='4'>
-        <Outlet />
-      </Box>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <SidebarContent onClose={() => onClose} display={{ base: 'none', md: 'block' }} />
+          <Drawer
+            autoFocus={false}
+            isOpen={isOpen}
+            placement='left'
+            onClose={onClose}
+            returnFocusOnClose={false}
+            onOverlayClick={onClose}
+            size='full'
+          >
+            <DrawerContent>
+              <SidebarContent onClose={onClose} />
+            </DrawerContent>
+          </Drawer>
+          {/* mobilenav */}
+          <MobileNav user={user} onOpen={onOpen} />
+          <Box ml={{ base: 0, md: 60 }} p='4'>
+            <Outlet />
+          </Box>
+        </>
+      )}
     </Box>
   )
 }
@@ -69,7 +102,6 @@ interface SidebarProps extends BoxProps {
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
   const location = useLocation()
-  console.log('🚀 ~ file: Sidebar.tsx:72 ~ SidebarContent ~ location:', location)
 
   return (
     <Box
@@ -152,8 +184,9 @@ const NavItem = ({ icon, children, href, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void
+  user: User
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ user, onOpen, ...rest }: MobileProps) => {
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -185,9 +218,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
                   }
                 />
                 <VStack display={{ base: 'none', md: 'flex' }} alignItems='flex-start' spacing='1px' ml='2'>
-                  <Text fontSize='sm'>Justina Clark</Text>
+                  <Text fontSize='sm'>
+                    {user.userData.firstName} {user.userData.lastName}
+                  </Text>
                   <Text fontSize='xs' color='gray.600'>
-                    Admin
+                    {user.role}
                   </Text>
                 </VStack>
                 <Box display={{ base: 'none', md: 'flex' }}>
@@ -196,11 +231,11 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
               </HStack>
             </MenuButton>
             <MenuList bg={useColorModeValue('white', 'gray.900')} borderColor={useColorModeValue('gray.200', 'gray.700')}>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <MenuItem>Thông tin tài khoản</MenuItem>
+              {/* <MenuItem>Settings</MenuItem>
+              <MenuItem>Billing</MenuItem> */}
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem>Đăng xuất</MenuItem>
             </MenuList>
           </Menu>
         </Flex>

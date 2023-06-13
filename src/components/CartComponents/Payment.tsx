@@ -1,6 +1,15 @@
+import { formatter } from 'config/numberFormat'
 import React from 'react'
+import { useSelector } from 'react-redux'
 
 const Payment = () => {
+  const { cartItems } = useSelector((state: any) => state.cart)
+
+  let cartTotalAmount = 0
+  cartItems?.forEach((item: any) => {
+    cartTotalAmount += item.cartQuantity * Number(item.priceProduct)
+  })
+
   return (
     <div className='payment'>
       <div className='payment__total'>
@@ -16,20 +25,24 @@ const Payment = () => {
             justifyContent: 'center',
           }}
         >
-          Cart Totals
+          Chi tiết thanh toán
         </h3>
         <div className='payment__total-view'>
           <div className='item'>
-            <h4>Subtotals</h4>
-            <span>32</span>
+            <h4>Tổng giá:</h4>
+            <span>{formatter.format(cartTotalAmount)}</span>
           </div>
           <div className='item'>
-            <h4>Totals</h4>
-            <span>32</span>
+            <h4>Giảm giá</h4>
+            <span>0</span>
+          </div>
+          <div className='item'>
+            <h4>Thanh toán</h4>
+            <span>{formatter.format(cartTotalAmount)}</span>
           </div>
           <div className='button'>
             <a href='/order-completed' className='button__completed'>
-              Proceed To Checkout
+              Tiến hành thanh toán
             </a>
           </div>
         </div>

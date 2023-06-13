@@ -1,4 +1,4 @@
-import IndexCompletedComponent from 'components/completedComponents'
+import IndexCompletedComponent from 'components/salesman/completedComponents'
 import React from 'react'
 
 const OrderCompleted = () => {

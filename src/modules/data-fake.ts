@@ -732,50 +732,24 @@ export const DataShopDefault = [
 ]
 export const DataSidebar = [
   {
-    title: 'Product Brand',
+    title: 'Danh mục sản phẩm',
     type: 'checkbox',
     listItem: [
       {
-        item: 'Coaster Futniture',
-        tags: 'coaster-futniture',
+        item: 'Xe cộ',
+        tags: 'XE-CO',
       },
       {
-        item: 'Fusion Dot Hight Fashion',
-        tags: 'fusion-dot-hight-fashion',
+        item: 'Thiết bị điện tử',
+        tags: 'THIET-BI-DIEN-TU',
       },
       {
-        item: 'Unique Furniture Restor',
-        tags: 'unique-furniture-restor',
+        item: 'Đồ gia dụng',
+        tags: 'DO-GIA-DUNG',
       },
       {
-        item: 'Dream Furniture Flipping',
-        tags: 'dream-furniture-flipping',
-      },
-      {
-        item: 'Young Repurposed',
-        tags: 'young-repurposed',
-      },
-      {
-        item: 'Greem DIY furniture',
-        tags: 'greem-diy-furniture',
-      },
-    ],
-  },
-  {
-    title: 'Discount Offer',
-    type: 'checkbox',
-    listItem: [
-      {
-        item: '20% Cashback',
-        tags: '20%-cashback',
-      },
-      {
-        item: '5% Cashback Offer',
-        tags: '5%-cashback-offer',
-      },
-      {
-        item: '25% discount Offer',
-        tags: '25%-discount-offer',
+        item: 'Đồ dùng văn phòng',
+        tags: 'DO-DUNG-VAN-PHONG',
       },
     ],
   },

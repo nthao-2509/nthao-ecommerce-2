@@ -9,6 +9,11 @@ import { useNavigate } from 'react-router-dom'
 import { Formik, Field, Form, FormikHelpers } from 'formik'
 import axios from 'axios'
 import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from 'store'
+import { message } from 'antd'
+import Loading from 'common/Loading'
+import { login, reset } from 'features/auth/authSlice'
 interface Values {
   email: string
   password: string
@@ -17,50 +22,83 @@ const SignIn = () => {
   const navigate = useNavigate()
   const toast = useToast()
   const [isSubmitted, setSubmitted] = React.useState<boolean>(false)
-  const onSubmitSignIn = async (values: Values) => {
-    const response = await axios.post('sign-in', {
-      email: values?.email,
-      password: values?.password,
-    })
-    if (response.data.message == 'success') {
-      if (response.data.role === 'admin') {
-        navigate('/admin')
-      }
-      if (response.data.role === 'salesman') {
-        localStorage.setItem(
-          'info_user',
-          JSON.stringify({
-            id: response.data.idUser,
-            token: response.data.toke,
-          })
-        )
-        navigate('/salesman')
-      } else {
-        navigate('/')
-      }
-    } else if (response.data.message == 'no-active') {
-      toast({
-        title: `Your account has not been activated`,
-        status: 'error',
-        position: 'top',
-        isClosable: true,
-        duration: 2000,
-        onCloseComplete() {
-          setSubmitted(false)
-        },
-      })
-    } else {
-      toast({
-        title: `Incorrect account or password`,
-        status: 'error',
-        position: 'top',
-        isClosable: true,
-        duration: 2000,
-        onCloseComplete() {
-          setSubmitted(false)
-        },
+  const [isLoadingPages, setIsLoadingPages] = React.useState<boolean>(false)
+
+  const { user, isLoading, isError, isSuccess, message: messageAuth } = useSelector((state: any) => state.auth)
+  const dispatch = useDispatch<AppDispatch>()
+  const [messageApi, contextHolder] = message.useMessage()
+
+  React.useEffect(() => {
+    if (isError) {
+      messageApi.open({
+        type: 'error',
+        content: messageAuth,
       })
     }
+    if (isSuccess || user) {
+      setIsLoadingPages(true)
+      setTimeout(() => {
+        setIsLoadingPages(false)
+        navigate(`/${user.role === 'buyer' ? '' : user.role}`)
+      }, 3000)
+    }
+    dispatch(reset())
+  }, [user, isLoading, isError, isSuccess, messageAuth, navigate, dispatch])
+
+  const onSubmitSignIn = async (values: Values) => {
+    setIsLoadingPages(true)
+    const parameters = {
+      email: values.email,
+      password: values.password,
+    }
+    dispatch(login(parameters))
+    // const response = await axios.post('sign-in', {
+    //   email: values?.email,
+    //   password: values?.password,
+    // })
+    // if (response.data.message == 'success') {
+    //   if (response.data.role === 'admin') {
+    //     navigate('/admin')
+    //   }
+    //   if (response.data.role === 'salesman') {
+    //     localStorage.setItem(
+    //       'info_user',
+    //       JSON.stringify({
+    //         id: response.data.idUser,
+    //         token: response.data.toke,
+    //       })
+    //     )
+    //     navigate('/salesman')
+    //   } else {
+    //     navigate('/')
+    //   }
+    // } else if (response.data.message == 'no-active') {
+    //   toast({
+    //     title: `Your account has not been activated`,
+    //     status: 'error',
+    //     position: 'top',
+    //     isClosable: true,
+    //     duration: 2000,
+    //     onCloseComplete() {
+    //       setSubmitted(false)
+    //     },
+    //   })
+    // } else {
+    //   toast({
+    //     title: `Incorrect account or password`,
+    //     status: 'error',
+    //     position: 'top',
+    //     isClosable: true,
+    //     duration: 2000,
+    //     onCloseComplete() {
+    //       setSubmitted(false)
+    //     },
+    //   })
+    // }
+  }
+
+  if (isLoading || isLoadingPages) {
+    return <Loading />
   }
 
   return (

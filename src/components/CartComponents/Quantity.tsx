@@ -1,9 +1,13 @@
 import React from 'react'
 import { Button, HStack, Input, useNumberInput } from '@chakra-ui/react'
+import { useDispatch } from 'react-redux'
+import { AppDispatch } from 'store'
+import { addToCart, updateQuantity } from 'features/cart/cartSlice'
 type Props = {
   quantity: number
+  itemProduct?: any
 }
-const QuantityComponent = ({ quantity }: Props) => {
+const QuantityComponent = ({ quantity, itemProduct }: Props) => {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
     step: 1,
     min: 1,
@@ -13,9 +17,19 @@ const QuantityComponent = ({ quantity }: Props) => {
   const inc = getIncrementButtonProps()
   const dec = getDecrementButtonProps()
   const input = getInputProps()
+
+  const dispatch = useDispatch<AppDispatch>()
+  const handleAddToCart = () => {
+    dispatch(addToCart(itemProduct))
+  }
+  const handleRemoveCartItems = () => {
+    dispatch(updateQuantity(itemProduct))
+  }
   return (
-    <HStack>
-      <Button {...dec}>-</Button>
+    <HStack width={'140px'}>
+      <Button onClick={handleRemoveCartItems} {...dec}>
+        -
+      </Button>
       <Input
         style={{
           textAlign: 'center',
@@ -23,7 +37,9 @@ const QuantityComponent = ({ quantity }: Props) => {
         maxW={16}
         {...input}
       />
-      <Button {...inc}>+</Button>
+      <Button onClick={handleAddToCart} {...inc}>
+        +
+      </Button>
     </HStack>
   )
 }

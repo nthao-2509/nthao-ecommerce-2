@@ -1,38 +1,31 @@
 import {
   Button,
-  Checkbox,
   Flex,
   FormControl,
   FormLabel,
   Heading,
   Input,
-  Link,
   Stack,
   Image,
   Center,
   Text,
   InputRightElement,
-  FormErrorMessage,
   InputGroup,
   Box,
   HStack,
-  useColorModeValue,
   Select,
   FormHelperText,
-  UnorderedList,
-  ListItem,
 } from '@chakra-ui/react'
 import React from 'react'
-import { FcGoogle } from 'react-icons/fc'
-import { FaFacebook } from 'react-icons/fa'
-import { SiLinkedin, SiMessenger } from 'react-icons/si'
-import { StyleDivider } from 'common/style'
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons'
 import Colors from 'modules/Colors'
 import { Field, Form, Formik } from 'formik'
-import axios from 'axios'
 import { message } from 'antd'
-
+import { useSelector, useDispatch } from 'react-redux'
+import { register, reset } from 'features/auth/authSlice'
+import { useNavigate } from 'react-router-dom'
+import Loading from 'common/Loading'
+import { AppDispatch } from 'store'
 interface Values {
   firstName: string
   lastName: string
@@ -50,9 +43,24 @@ const SignUp = () => {
   const [isSuccessConfirmPassword, setIsSuccessConfirmPassword] = React.useState<boolean>(true)
   const [valueMsgValidationPassword, setValueMsgValidationPassword] = React.useState<string>('')
   const [isSignUp, setIsSignUp] = React.useState<boolean>(false)
-  const [valueRole, setValueRole] = React.useState<string>('')
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [messageApi, contextHolder] = message.useMessage()
+
+  //
+  const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
+
+  const { user, isLoading: isLoadingAuth, isError, isSuccess, message: messageAuth } = useSelector((state: any) => state.auth)
+
+  React.useEffect(() => {
+    if (isError) {
+      messageApi.open({
+        type: 'error',
+        content: messageAuth,
+      })
+    }
+    dispatch(reset())
+  }, [user, isLoadingAuth, isError, isSuccess, messageAuth, navigate, dispatch])
+
   const validationPassword = (values: string) => {
     const uppercaseRegExp = /(?=.*?[A-Z])/
     const lowercaseRegExp = /(?=.*?[a-z])/
@@ -66,6 +74,7 @@ const SignUp = () => {
     const specialCharPassword = specialCharRegExp.test(values)
     const minLengthPassword = minLengthRegExp.test(values)
     let errMsg = ''
+
     setIsSignUp(true)
     if (passwordLength === 0) {
       errMsg = 'Mật khẩu yếu'
@@ -86,123 +95,113 @@ const SignUp = () => {
     setValuePassword(values)
     setValueMsgValidationPassword(errMsg)
   }
-
-  const onSubmitRegister = async (values: Values) => {
+  const onSubmitRegister = (values: Values) => {
     setIsSignUp(true)
-
-    const response = await axios.post('/sign-up', {
+    const parameters = {
       email: values.email,
       password: values.password,
       firstName: values.firstName,
       lastName: values.lastName,
       role: values.role,
-      typeProduct: values.typeProduct,
-    })
-    if (response.data.message === 'success') {
-      messageApi.open({
-        type: 'success',
-        content: 'Đăng ký tài khoản thành công',
-      })
-    } else {
-      messageApi.open({
-        type: 'error',
-        content: 'Đăng ký tài khoản thất bại',
-      })
     }
+    dispatch(register(parameters))
   }
 
   return (
     <>
-      {contextHolder}
+      {isLoadingAuth ? (
+        <Loading />
+      ) : (
+        <>
+          {contextHolder}
+          <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
+            <Flex flex={1}>
+              <Image
+                alt={'Login Image'}
+                objectFit={'cover'}
+                src={
+                  'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
+                }
+              />
+            </Flex>
+            <Flex p={8} flex={1} align={'center'} justify={'center'}>
+              <Stack spacing={4} w={'full'} maxW={'md'}>
+                <Center>
+                  <Heading
+                    style={{
+                      fontFamily: 'Josefin Sans',
+                      fontSize: 32,
+                    }}
+                    fontSize={'2xl'}
+                  >
+                    Đăng ký
+                  </Heading>
+                </Center>
+                <Formik
+                  initialValues={{
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    role: '',
+                    password: '',
+                    confirmPassword: '',
+                    typeProduct: '',
+                  }}
+                  onSubmit={async (values: Values) => {
+                    onSubmitRegister(values)
+                  }}
+                >
+                  {(props) => (
+                    <Form>
+                      <HStack>
+                        <Box>
+                          <Field name={'firstName'}>
+                            {({ field, form }: any) => (
+                              <Box>
+                                <FormControl id='firstName' isRequired>
+                                  <FormLabel>Họ</FormLabel>
+                                  <Input {...field} type='text' />
+                                </FormControl>
+                              </Box>
+                            )}
+                          </Field>
+                        </Box>
+                        <Box>
+                          <Field name={'lastName'}>
+                            {({ field, form }: any) => (
+                              <Box>
+                                <FormControl id='lastName' isRequired>
+                                  <FormLabel>Tên</FormLabel>
+                                  <Input {...field} type='text' />
+                                </FormControl>
+                              </Box>
+                            )}
+                          </Field>
+                        </Box>
+                      </HStack>
 
-      <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
-        <Flex flex={1}>
-          <Image
-            alt={'Login Image'}
-            objectFit={'cover'}
-            src={
-              'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
-            }
-          />
-        </Flex>
-        <Flex p={8} flex={1} align={'center'} justify={'center'}>
-          <Stack spacing={4} w={'full'} maxW={'md'}>
-            <Center>
-              <Heading
-                style={{
-                  fontFamily: 'Josefin Sans',
-                  fontSize: 32,
-                }}
-                fontSize={'2xl'}
-              >
-                Đăng ký
-              </Heading>
-            </Center>
-            <Formik
-              initialValues={{
-                firstName: '',
-                lastName: '',
-                email: '',
-                role: '',
-                password: '',
-                confirmPassword: '',
-                typeProduct: '',
-              }}
-              onSubmit={async (values: Values) => {
-                onSubmitRegister(values)
-              }}
-            >
-              {(props) => (
-                <Form>
-                  <HStack>
-                    <Box>
-                      <Field name={'firstName'}>
+                      <Field name={'email'}>
                         {({ field, form }: any) => (
                           <Box>
-                            <FormControl id='firstName' isRequired>
-                              <FormLabel>Họ</FormLabel>
+                            <FormControl id='email' isRequired>
+                              <FormLabel>Email</FormLabel>
                               <Input {...field} type='text' />
                             </FormControl>
                           </Box>
                         )}
                       </Field>
-                    </Box>
-                    <Box>
-                      <Field name={'lastName'}>
+                      <Field name={'role'}>
                         {({ field, form }: any) => (
-                          <Box>
-                            <FormControl id='lastName' isRequired>
-                              <FormLabel>Tên</FormLabel>
-                              <Input {...field} type='text' />
-                            </FormControl>
-                          </Box>
+                          <FormControl id='role' isRequired>
+                            <FormLabel>Loại tài khoản</FormLabel>
+                            <Select {...field} placeholder='Loại tài khoản'>
+                              <option value='buyer'>Người mua</option>
+                              <option value='salesman'>Người bán</option>
+                            </Select>
+                          </FormControl>
                         )}
                       </Field>
-                    </Box>
-                  </HStack>
-
-                  <Field name={'email'}>
-                    {({ field, form }: any) => (
-                      <Box>
-                        <FormControl id='email' isRequired>
-                          <FormLabel>Email</FormLabel>
-                          <Input {...field} type='text' />
-                        </FormControl>
-                      </Box>
-                    )}
-                  </Field>
-                  <Field name={'role'}>
-                    {({ field, form }: any) => (
-                      <FormControl onChange={(event: any) => setValueRole(event.target.value)} id='role' isRequired>
-                        <FormLabel>Loại tài khoản</FormLabel>
-                        <Select {...field} placeholder='Loại tài khoản'>
-                          <option value='buyer'>Người mua</option>
-                          <option value='salesman'>Người bán</option>
-                        </Select>
-                      </FormControl>
-                    )}
-                  </Field>
-                  {/* {valueRole === 'salesman' && (
+                      {/* {valueRole === 'salesman' && (
                     <Field name={'typeProduct'}>
                       {({ field, form }: any) => (
                         <FormControl isRequired>
@@ -217,76 +216,76 @@ const SignUp = () => {
                       )}
                     </Field>
                   )} */}
-                  <Field name={'password'}>
-                    {({ field, form }: any) => (
-                      <FormControl
-                        onChange={(event: any) => {
-                          validationPassword(event.target.value)
-                        }}
-                        isRequired
-                      >
-                        <FormLabel>Mật khẩu</FormLabel>
-                        <InputGroup>
-                          <Input {...field} type={showPassword ? 'text' : 'password'} />
-                          <InputRightElement h={'full'}>
-                            <Button variant={'ghost'} onClick={() => setShowPassword((showPassword) => !showPassword)}>
-                              {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                            </Button>
-                          </InputRightElement>
-                        </InputGroup>
-                        <FormHelperText color={'red.500'}>{valueMsgValidationPassword}</FormHelperText>
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Field name={'confirmPassword'}>
-                    {({ field, form }: any) => (
-                      <FormControl
-                        onChange={(event: any) => {
-                          if (event.target.value === valuePassword) {
-                            setIsSuccessConfirmPassword(true)
-                            setIsSignUp(false)
-                          } else {
-                            setIsSuccessConfirmPassword(false)
-                            setIsSignUp(true)
-                          }
-                        }}
-                        isRequired
-                      >
-                        <FormLabel>Xác nhận mật khẩu</FormLabel>
-                        <InputGroup>
-                          <Input {...field} type={showConfirmPassword ? 'text' : 'password'} />
-                          <InputRightElement h={'full'}>
-                            <Button variant={'ghost'} onClick={() => setShowConfirmPassword((showPassword) => !showPassword)}>
-                              {showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
-                            </Button>
-                          </InputRightElement>
-                        </InputGroup>
-                        {!isSuccessConfirmPassword && <FormHelperText color={'red.500'}>Xác nhận mật khẩu sai</FormHelperText>}
-                      </FormControl>
-                    )}
-                  </Field>
-                  <Stack spacing={10} pt={2}>
-                    <Button
-                      loadingText='Submitting'
-                      type='submit'
-                      size='lg'
-                      bg={Colors.pink}
-                      isDisabled={isSignUp}
-                      color={'white'}
-                      _hover={{
-                        bg: Colors.white,
-                        color: Colors.pink,
-                        border: `1px solid ${Colors.pink}`,
-                      }}
-                    >
-                      Đăng ký
-                    </Button>
-                  </Stack>
-                </Form>
-              )}
-            </Formik>
+                      <Field name={'password'}>
+                        {({ field, form }: any) => (
+                          <FormControl
+                            onChange={(event: any) => {
+                              validationPassword(event.target.value)
+                            }}
+                            isRequired
+                          >
+                            <FormLabel>Mật khẩu</FormLabel>
+                            <InputGroup>
+                              <Input {...field} type={showPassword ? 'text' : 'password'} />
+                              <InputRightElement h={'full'}>
+                                <Button variant={'ghost'} onClick={() => setShowPassword((showPassword) => !showPassword)}>
+                                  {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                </Button>
+                              </InputRightElement>
+                            </InputGroup>
+                            <FormHelperText color={'red.500'}>{valueMsgValidationPassword}</FormHelperText>
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Field name={'confirmPassword'}>
+                        {({ field, form }: any) => (
+                          <FormControl
+                            onChange={(event: any) => {
+                              if (event.target.value === valuePassword) {
+                                setIsSuccessConfirmPassword(true)
+                                setIsSignUp(false)
+                              } else {
+                                setIsSuccessConfirmPassword(false)
+                                setIsSignUp(true)
+                              }
+                            }}
+                            isRequired
+                          >
+                            <FormLabel>Xác nhận mật khẩu</FormLabel>
+                            <InputGroup>
+                              <Input {...field} type={showConfirmPassword ? 'text' : 'password'} />
+                              <InputRightElement h={'full'}>
+                                <Button variant={'ghost'} onClick={() => setShowConfirmPassword((showPassword) => !showPassword)}>
+                                  {showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
+                                </Button>
+                              </InputRightElement>
+                            </InputGroup>
+                            {!isSuccessConfirmPassword && <FormHelperText color={'red.500'}>Xác nhận mật khẩu sai</FormHelperText>}
+                          </FormControl>
+                        )}
+                      </Field>
+                      <Stack spacing={10} pt={2}>
+                        <Button
+                          loadingText='Submitting'
+                          type='submit'
+                          size='lg'
+                          bg={Colors.pink}
+                          isDisabled={isSignUp}
+                          color={'white'}
+                          _hover={{
+                            bg: Colors.white,
+                            color: Colors.pink,
+                            border: `1px solid ${Colors.pink}`,
+                          }}
+                        >
+                          Đăng ký
+                        </Button>
+                      </Stack>
+                    </Form>
+                  )}
+                </Formik>
 
-            {/* <StyleDivider>
+                {/* <StyleDivider>
               <h2 className='divider line razor' contentEditable>
                 HOẶC
               </h2>
@@ -303,22 +302,24 @@ const SignUp = () => {
                 </Center>
               </Button>
             </Stack> */}
-            <Stack pt={6}>
-              <Text align={'center'}>
-                Đã có tài khoản?{' '}
-                <a
-                  href='/sign-in'
-                  style={{
-                    color: '#3182ce',
-                  }}
-                >
-                  ĐĂNG NHẬP
-                </a>
-              </Text>
-            </Stack>
+                <Stack pt={6}>
+                  <Text align={'center'}>
+                    Đã có tài khoản?{' '}
+                    <a
+                      href='/sign-in'
+                      style={{
+                        color: '#3182ce',
+                      }}
+                    >
+                      ĐĂNG NHẬP
+                    </a>
+                  </Text>
+                </Stack>
+              </Stack>
+            </Flex>
           </Stack>
-        </Flex>
-      </Stack>
+        </>
+      )}
     </>
   )
 }

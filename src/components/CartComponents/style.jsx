@@ -6,7 +6,7 @@ export const StyledCart = styled.div`
     display: flex;
     gap: 30px;
     .table {
-      width: calc(100% - (371px + 30px));
+      width: calc(100% - (300px));
       th {
         font-family: 'Josefin Sans';
         font-size: 16px;
@@ -21,6 +21,7 @@ export const StyledCart = styled.div`
         text-align: center;
       }
       .information__product {
+        width: 300px;
         display: flex;
         align-items: center;
         gap: 10px;
@@ -32,12 +33,17 @@ export const StyledCart = styled.div`
           }
         }
         .information {
+          width: 60%;
           .name {
             h4 {
+              width: 100%;
               font-family: 'Josefin Sans';
               font-size: 16px;
               line-height: 16px;
               color: ${Colors.navyBlue};
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
             }
           }
           .color {
@@ -65,7 +71,7 @@ export const StyledCart = styled.div`
         &-view {
           border-radius: 8px;
           background-color: #f4f4fc;
-          width: calc((371px + 30px));
+          width: calc((300px - 30px));
           padding: 36px 31px;
           .item {
             display: flex;

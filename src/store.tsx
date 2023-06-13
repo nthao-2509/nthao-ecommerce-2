@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authSlice from 'redux/authSlice'
-// ...
-
+import authReducer from 'features/auth/authSlice'
+import cartSlice from 'features/cart/cartSlice'
+import productSlice from 'features/getProduct/productSlice'
+import wishListItemSlice from 'features/wishlist/wishListSlice'
 export const store = configureStore({
   reducer: {
-    user: authSlice,
+    auth: authReducer,
+    product: productSlice,
+    cart: cartSlice,
+    wishList: wishListItemSlice,
   },
 })
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
-// Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch

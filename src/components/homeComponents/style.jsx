@@ -162,6 +162,7 @@ export const StyleFeatureProduct = styled.div`
   }
 `
 export const StyledLeatestProducts = styled.div`
+  z-index: 1;
   .tabs {
     ul {
       display: flex;
