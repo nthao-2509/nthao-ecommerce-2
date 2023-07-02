@@ -2,6 +2,7 @@ import { message } from "antd";
 import AdminLayout from "layouts/admin";
 
 import AuthLayout from "layouts/auth";
+import ClientLayout from "layouts/clients";
 import RtlLayout from "layouts/rtl";
 import React from "react";
 import { useDispatch } from "react-redux";
@@ -20,8 +21,8 @@ function App() {
     <Routes>
       <Route path='auth/*' element={<AuthLayout />} />
       <Route path='admin/*' element={<AdminLayout />} />
-      <Route path='rtl/*' element={<RtlLayout />} />
-      <Route path='/' element={<Navigate to={"/admin"} replace />} />
+      <Route path='/*' element={<ClientLayout />} />
+      {/* <Route path='/' element={<Navigate to={"/admin"} replace />} /> */}
     </Routes>
   );
 }
