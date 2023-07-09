@@ -2,6 +2,7 @@ import React from "react";
 import Container from "../Container";
 import { CollectionStyle } from "../styleComponents/CollectionStyle";
 import { Link } from "react-router-dom";
+import TopSession from "./TopSession";
 
 const Collection = () => {
   return (
@@ -9,12 +10,10 @@ const Collection = () => {
       <Container>
         <div className='collection'>
           <div className='collection__top'>
-            <div className='title'>
-              <h1>Editor's Pick</h1>
-            </div>
-            <div className='description'>
-              <p>Problems trying to resolve the conflict between </p>
-            </div>
+            <TopSession
+              title="Editor's Pick"
+              description='Problems trying to resolve the conflict between'
+            />
           </div>
           <div className='collection__cards'>
             {Array.from({ length: 4 }).map((card: any, key: number) => (

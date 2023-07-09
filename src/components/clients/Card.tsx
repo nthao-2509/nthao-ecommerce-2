@@ -1,5 +1,6 @@
 import React from "react";
-import { StyleCard } from "./styled/CardStyled";
+import { StyleCard } from "./styles/CardStyled";
+import { Link, useNavigate } from "react-router-dom";
 
 type Props = {
   image: string;
@@ -11,6 +12,8 @@ type Props = {
   sale: boolean;
   newProduct: boolean;
   key: number | string;
+  href: string;
+  view?: "grid" | "list";
 };
 
 const Card = ({
@@ -23,10 +26,16 @@ const Card = ({
   sale,
   newProduct,
   key,
+  href,
+  view = "grid",
 }: Props) => {
+  const navigate = useNavigate();
+  const handleNavigate = () => {
+    if (view === "grid") window.location.href = href;
+  };
   return (
-    <div key={key}>
-      <StyleCard>
+    <div key={key} onClick={handleNavigate}>
+      <StyleCard view={view}>
         <div className='image' key={key}>
           <img src={image} alt={title} />
         </div>
@@ -48,6 +57,11 @@ const Card = ({
               ))}
             </ul>
           </div>
+          {view === "list" && (
+            <Link className='read__more' to={href}>
+              Read More <i className='fa-solid fa-angle-right'></i>
+            </Link>
+          )}
         </div>
       </StyleCard>
     </div>

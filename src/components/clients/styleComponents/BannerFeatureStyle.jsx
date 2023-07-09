@@ -1,3 +1,4 @@
+import { MaxScreenDevice, MinScreenDevice } from "assets/DeviceScreen";
 import Colors from "modules/Colors";
 import styled from "styled-components";
 export const BannerFeatureStyle = styled.div`
@@ -5,6 +6,7 @@ export const BannerFeatureStyle = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   gap: 90px;
   .left {
     display: flex;
@@ -18,41 +20,36 @@ export const BannerFeatureStyle = styled.div`
       object-fit: cover;
     }
   }
-  .right {
+  .top__session {
     display: flex;
     width: 447px;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
-    .heading {
-      h5 {
-        font-size: 16px;
-        font-weight: 700;
-        line-height: 24px;
-        letter-spacing: 0.1px;
-        color: ${Colors.primaryColor};
-        margin-bottom: 0;
+    text-align: start;
+  }
+  @media ${MaxScreenDevice.laptop} {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    .left {
+      width: 60%;
+    }
+  }
+  @media only screen and (${MinScreenDevice.mobileS}) and (${MaxScreenDevice.tablet_800}) {
+    flex-direction: column;
+    padding: 50px 20.5px 0.45px 20.5px;
+    gap: 50px;
+    .left {
+      order: 2;
+      width: 100%;
+      img {
+        width: 50%;
       }
     }
-    .title {
-      h2 {
-        font-size: 40px;
-        font-weight: 700;
-        line-height: 50px;
-        letter-spacing: 0.2px;
-        color: ${Colors.textColor};
-        margin-bottom: 0;
-      }
-    }
-    .description {
-      p {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        letter-spacing: 0.2px;
-        color: ${Colors.secondTextColor};
-        margin-bottom: 0;
-      }
+    .top__session {
+      order: 1;
+      padding: 0 46.5px;
+      width: 100%;
     }
   }
 `;

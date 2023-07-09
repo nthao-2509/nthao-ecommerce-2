@@ -1,9 +1,10 @@
+import { MaxScreenDevice, MinScreenDevice } from "assets/DeviceScreen";
 import Colors from "modules/Colors";
 import styled from "styled-components";
 export const StyleNavbar = styled.div`
   height: 100%;
   width: 100%;
-  background-color: #252b42;
+  background-color: ${Colors.secondaryColor1};
   .header {
     display: flex;
     align-items: center;
@@ -81,6 +82,7 @@ export const StyleNavbar = styled.div`
           /* &:hover { */
           position: relative;
           z-index: 99;
+
           a {
             display: block;
             position: relative;
@@ -110,7 +112,8 @@ export const StyleNavbar = styled.div`
               text-decoration: none !important;
             }
           }
-          &:hover {
+          &:hover,
+          &.active {
             a {
               color: #23a6f0;
             }
@@ -131,17 +134,18 @@ export const StyleNavbar = styled.div`
             display: block;
             position: absolute;
             top: 90px;
-            background-color: ${Colors.mainColor};
+            background-color: ${Colors.lightGray1};
             visibility: hidden;
             opacity: 0;
             transition: all 0.5s ease;
             transform: translateY(-20px);
+            border-radius: 5px;
             &__ctt {
-              padding: 10px 0px;
+              padding: 5px 0px;
               background: ${Colors.mainColor};
             }
             &__item {
-              width: 100px;
+              width: 100%;
               &-list {
                 width: 100%;
                 padding: 0px;
@@ -161,6 +165,7 @@ export const StyleNavbar = styled.div`
                     position: relative;
                     z-index: 1;
                     padding: 10px 20px;
+                    font-weight: 500;
                     color: ${Colors.dark};
                     text-transform: none !important;
                     font-size: 13px !important;
@@ -190,8 +195,19 @@ export const StyleNavbar = styled.div`
           align-items: center;
           gap: 5px;
           justify-content: center;
+          transition: all 0.4s ease;
+          &:hover {
+            color: ${Colors.textColor};
+          }
           .badge {
             margin-bottom: 4px;
+          }
+        }
+        &.search {
+          cursor: pointer;
+          transition: all 0.4s ease;
+          &:hover {
+            color: ${Colors.textColor};
           }
         }
         &.sign-in {
@@ -199,8 +215,67 @@ export const StyleNavbar = styled.div`
           font-weight: 600;
           line-height: 24px;
           letter-spacing: 0.2px;
+          a {
+            transition: all 0.4s ease;
+            &:hover {
+              color: ${Colors.textColor};
+            }
+          }
           i {
             margin-right: 5px;
+          }
+        }
+      }
+    }
+    .mobile {
+      display: none;
+    }
+  }
+  @media ${MaxScreenDevice.laptop} {
+    .header {
+      &__left {
+        .item {
+          &.phone,
+          &.email {
+            p {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+    .navbar {
+      .user {
+        width: 40%;
+      }
+    }
+  }
+  /* Mobile M */
+
+  @media only screen and (${MinScreenDevice.mobileS}) and (${MaxScreenDevice.tablet_800}) {
+    .header {
+      display: none;
+    }
+    .navbar {
+      padding: 12px 10px;
+      .logo {
+        font-size: 20px;
+        width: 50%;
+        text-align: start;
+      }
+      .menu,
+      .user {
+        display: none;
+      }
+      .mobile {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        i {
+          font-size: 20px;
+          cursor: pointer;
+          &:hover {
+            color: ${Colors.primaryTextColor};
           }
         }
       }

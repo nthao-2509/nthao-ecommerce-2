@@ -20,3 +20,34 @@ export type TypeRouteClient = {
   secondary?: boolean;
   views: ViewRoutes[];
 };
+
+//
+export type TypeDataCollapse = {
+  key: number | string;
+  label: string;
+  children: string;
+};
+
+export type TypeDataTabsContentChildren2 = {
+  type: string;
+  title?: string | undefined;
+  collapse?: TypeDataCollapse[] | undefined;
+};
+export type TypeDataTabsContentChildren = {
+  type: string;
+  title?: string | undefined;
+  text?: string | undefined;
+  content?: TypeDataTabsContentChildren2[] | undefined;
+  collapse?: TypeDataCollapse[] | undefined;
+};
+
+export type TypeDataTabsContent = {
+  type: string;
+  src?: string | undefined;
+  content?: TypeDataTabsContentChildren[] | undefined;
+};
+
+export type TypeDataTabs = {
+  className: string;
+  content: TypeDataTabsContent[];
+};

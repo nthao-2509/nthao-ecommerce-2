@@ -1,6 +1,8 @@
+import { MaxScreenDevice, MinScreenDevice } from "assets/DeviceScreen";
 import Colors from "modules/Colors";
 import styled from "styled-components";
 export const FeaturedPostsStyle = styled.div`
+  background-color: ${Colors.white};
   .content {
     margin-top: 96px;
     .cards {
@@ -98,6 +100,8 @@ export const FeaturedPostsStyle = styled.div`
             display: inline-flex;
             gap: 10px;
             color: ${Colors.primaryTextColor};
+            transition: all 0.4s ease;
+            cursor: pointer;
             a {
               text-decoration: none;
               font-size: 14px;
@@ -108,6 +112,78 @@ export const FeaturedPostsStyle = styled.div`
             i {
               margin-bottom: 0;
               line-height: unset;
+            }
+            &:hover {
+              background-color: ${Colors.primaryColor};
+              color: ${Colors.white};
+            }
+          }
+        }
+      }
+    }
+  }
+  @media ${MinScreenDevice.laptop} {
+    padding: 0 20px;
+  }
+
+  @media only screen and (${MinScreenDevice.mobileS}) and (${MaxScreenDevice.tablet_800}) {
+    padding: 0 42.5px;
+    .content {
+      .cards {
+        grid-template-columns: repeat(1, 1fr);
+        .item {
+          flex-direction: column;
+          height: auto;
+          &__image {
+            height: 300px;
+            width: 100%;
+          }
+          &__content {
+            padding: 10px 15px;
+            .link {
+              &__tag {
+                font-size: 12px;
+                font-weight: 400;
+              }
+            }
+            .title {
+              margin: 10px 0px;
+              h2 {
+                font-size: 16px;
+                font-weight: 300px;
+              }
+            }
+            .description {
+              max-width: 242px;
+              p {
+                font-size: 14px;
+                font-weight: 400px;
+              }
+            }
+            .price {
+              margin-top: 16px;
+              del {
+                font-size: 16px;
+              }
+              p {
+                font-size: 16px;
+              }
+            }
+
+            .button {
+              margin-top: 10px;
+              border: none;
+              border-radius: 37px;
+              padding: 0;
+              color: ${Colors.textColor};
+              cursor: pointer;
+              a {
+                font-size: 14px;
+              }
+              &:hover {
+                background-color: transparent;
+                color: ${Colors.secondTextColor};
+              }
             }
           }
         }

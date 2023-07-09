@@ -1,39 +1,10 @@
+import { MaxScreenDevice, MinScreenDevice } from "assets/DeviceScreen";
 import Colors from "modules/Colors";
 import styled from "styled-components";
 export const FeatureStyle = styled.div`
   padding: 80px 0;
-  .feature {
-    text-align: center;
-    &__top {
-      margin-bottom: 80px;
-      .heading {
-        h2 {
-          color: #737373;
-          font-size: 18px;
-          letter-spacing: 0.2px;
-          font-weight: 400;
-        }
-      }
-      .title {
-        h3 {
-          font-size: 24px;
-          font-weight: 700;
-          line-height: 32px;
-          letter-spacing: 0.1px;
-          color: #252b42;
-          margin: 10px 0;
-        }
-      }
-      .description {
-        font-size: 14px;
-        font-weight: 400;
-        line-height: 20px;
-        letter-spacing: 0.2px;
-        color: #737373;
-      }
-    }
-  }
   .cards {
+    margin-top: 80px;
     display: grid;
     grid-template-columns: repeat(4, 239px);
     gap: 20.5px;
@@ -50,6 +21,26 @@ export const FeatureStyle = styled.div`
       font-weight: 700;
       line-height: 22px;
       letter-spacing: 0.2px;
+      transition: all 0.4s ease;
+      &:hover {
+        background-color: ${Colors.primaryColor};
+        color: ${Colors.white};
+      }
+    }
+  }
+  @media ${MaxScreenDevice.laptop} {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+    .cards {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media only screen and (${MinScreenDevice.mobileS}) and (${MaxScreenDevice.mobileL}) {
+    padding: 50px 0;
+    .cards {
+      margin-top: 80px;
+      grid-template-columns: repeat(1, 100%);
+      padding: 0 20px;
     }
   }
 `;

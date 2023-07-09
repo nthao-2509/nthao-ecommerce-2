@@ -23,4 +23,9 @@ export default {
   secondaryColor1: "#23856D",
   primaryTextColor: "#23A6F0",
   textColor: "#252B42",
+  lightGray1: "#FAFAFA",
+  lightGray2: "#ECECEC",
+  yellowColor: "#F3CD03",
+  dangerColor: "#E74040",
+  darkBackgroundColor: "#252B42",
 };

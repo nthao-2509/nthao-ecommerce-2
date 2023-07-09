@@ -1,6 +1,7 @@
 import React from "react";
 import { ServiceStyle } from "../styleComponents/ServiceStyle";
 import Container from "../Container";
+import TopSession from "./TopSession";
 
 const datafake = [
   {
@@ -32,17 +33,11 @@ const Service = () => {
   return (
     <ServiceStyle>
       <Container>
-        <div className='top'>
-          <div className='heading'>
-            <h2>{datafake?.[0]?.heading}</h2>
-          </div>
-          <div className='title'>
-            <h3>{datafake?.[0]?.title}</h3>
-          </div>
-          <div className='description'>
-            <p>{datafake?.[0]?.description}</p>
-          </div>
-        </div>
+        <TopSession
+          heading={datafake?.[0]?.heading}
+          title={datafake?.[0]?.title}
+          description={datafake?.[0]?.description}
+        />
         <div className='content'>
           {datafake?.[0]?.content?.map(
             (
