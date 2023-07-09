@@ -15,7 +15,7 @@ const datafake = [
         description: "Get your best looking smile now!",
       },
       {
-        image: "Concrete.png",
+        image: "concrete.png",
         title: "Concrete",
         description:
           "Defalcate is most focused in helping you discover your most beautiful smile",

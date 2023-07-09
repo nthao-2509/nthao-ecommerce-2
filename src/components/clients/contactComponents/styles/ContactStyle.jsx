@@ -134,7 +134,7 @@ export const ContactStyled = styled.div`
       }
     }
   }
-  @media ${MaxScreenDevice.mobileL} {
+  @media only screen and (${MaxScreenDevice.mobileL}) {
     .visit-our-office {
       padding: 112px 20px 0;
       .title {
