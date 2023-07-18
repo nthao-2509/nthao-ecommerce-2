@@ -1,77 +1,78 @@
 import React from "react";
 import { StyleSignIn } from "./style";
 import { Button, Divider, Form, Input } from "antd";
+import { Link, useLocation } from "react-router-dom";
 
 const SignIn = () => {
+  const [isSignIn, setIsSignIn] = React.useState<boolean>(true);
   const [form] = Form.useForm();
-  const onSubmit = () => {
-    console.log(123123);
-  };
+  const location = useLocation();
+  React.useEffect(() => {
+    setIsSignIn(location.pathname.split("/")?.[2] === "sign-in");
+  }, [setIsSignIn, location]);
+
+  const onSubmit = () => {};
   return (
     <StyleSignIn>
-      <>
-        <div className='image'>
-          <img src='/images/bg-sign-in.png' alt='sign-in' />
+      <div className='sign-in'>
+        <div className='left'>
+          <img src='/images/sign-in-logo.jpg' alt='' />
         </div>
-        <div className='form'>
-          <>
-            <div className='title'>SIGN-IN</div>
-            <div className='hr'>
-              <Divider className='hr-text'>Lets get started</Divider>
+        <div className='right'>
+          <div className='content'>
+            <div className='title'>
+              <h1>{isSignIn ? "Sign In" : "Create Account"}</h1>
             </div>
-            <div className='login-gg-fb'>
-              <div className='button'>
+            <div className='sign-in-with'>
+              <div className='sign-in-with-google'>
                 <button>
-                  <img src='/images/logo-google.png' alt='google' />
-                  Google Account
+                  <img src='/images/logo-google.png' alt='logo google' />
+                  <p>Sign Up with Google</p>
                 </button>
               </div>
-              <div className='button'>
+              <div className='sign-in-with-facebook'>
                 <button>
-                  <img src='/images/logos_facebook.png' alt='facebook' />
-                  Facebook Account
+                  <img src='/images/logo-facebook.png' alt='logo google' />
+                  <p>Sign Up with Facebook</p>
                 </button>
               </div>
             </div>
+            <p className='or'>-OR-</p>
             <Form
-              onFinish={onSubmit}
               form={form}
-              className='form-input'
+              className='form'
+              onFinish={onSubmit}
               layout='vertical'
             >
-              <Form.Item label='Full Name' name='fullName' required>
-                <Input
-                  className='input'
-                  placeholder='Enter your Full Name here'
-                />
+              {!isSignIn && (
+                <Form.Item name={"fullName"} label={"FullName"}>
+                  <Input className='form__input' type='text' />
+                </Form.Item>
+              )}
+              <Form.Item name={"email"} label={"E-mail Address"}>
+                <Input className='form__input' type='email' />
               </Form.Item>
-              <Form.Item label='Mobile Phone ' name='numberPhone' required>
-                <Input
-                  className='input'
-                  placeholder='Enter your phone number'
-                />
+              <Form.Item name={"password"} label={"Password"}>
+                <Input className='form__input' type='password' />
               </Form.Item>
-              <Form.Item label='Email ' name='email' required>
-                <Input
-                  className='input'
-                  type='email'
-                  placeholder='Please enter your email address'
-                />
-              </Form.Item>
-              <Form.Item label='Password' name='password' required>
-                <Input
-                  className='input'
-                  type='password'
-                  placeholder='Please enter your password'
-                />
-              </Form.Item>
-              <Form.Item label='' required className='button-sign-up'>
-                <button type='submit'>Sign up</button>
+              <Form.Item>
+                <button className='button__sign-in'>
+                  {isSignIn ? "Create Account" : "Sign In"}
+                </button>
               </Form.Item>
             </Form>
-          </>
+            <p className='have-an-account'>
+              {isSignIn ? "Don't" : "Already"} have an account ?
+              <Link
+                className='link'
+                to={isSignIn ? "/auth/sign-up" : "/auth/sign-in"}
+              >
+                {isSignIn ? "Register" : "Log in"}
+              </Link>
+            </p>
+          </div>
         </div>
-      </>
+      </div>
     </StyleSignIn>
   );
 };

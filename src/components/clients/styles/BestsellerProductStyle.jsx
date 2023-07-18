@@ -22,13 +22,13 @@ export const BestsellerProductStyled = styled.div`
     gap: 30px;
     margin-top: 50px;
   }
-  @media ${MaxScreenDevice.tablet_800} {
+  @media only screen and (${MaxScreenDevice.tablet_800}) {
     padding: 24px 20px 48px;
     .cards {
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  @media ${MaxScreenDevice.mobileL} {
+  @media only screen and (${MaxScreenDevice.mobileL}) {
     .cards {
       grid-template-columns: repeat(1, 1fr);
     }

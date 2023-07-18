@@ -78,14 +78,14 @@ export const DescriptionStyle = styled.div`
     }
   }
 
-  @media ${MaxScreenDevice.tablet_800} {
+  @media only screen and (${MaxScreenDevice.tablet_800}) {
     padding: 24px 20px 48px;
     .card {
       grid-template-columns: repeat(1, 1fr);
     }
   }
 
-  @media ${MaxScreenDevice.mobileL} {
+  @media only screen and (${MaxScreenDevice.mobileL}) {
     padding: 24px 20px 48px;
     .card {
       grid-template-columns: repeat(1, 1fr);

@@ -276,7 +276,7 @@ export const DetailProductStyled = styled.div`
       }
     } */
   }
-  @media only screen and (${MinScreenDevice.mobileL}) and (${MaxScreenDevice.tablet_800}) {
+  @media only screen and(${MaxScreenDevice.tablet_800}) {
     .container {
       .content {
         .product {
@@ -322,7 +322,7 @@ export const DetailProductStyled = styled.div`
       }
     }
   }
-  @media screen and (${MaxScreenDevice.mobileL}) {
+  @media only screen and (${MaxScreenDevice.mobileL}) {
     .container {
       .content {
         .product {

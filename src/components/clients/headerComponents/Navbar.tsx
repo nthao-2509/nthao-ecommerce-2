@@ -1,12 +1,12 @@
 import { Drawer, theme } from "antd";
 import { dataNavbar } from "modules/data-fake";
 import React from "react";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import DrawerMobile from "./DrawerMobile";
 
 const Navbar = () => {
   const [open, setOpen] = React.useState(false);
-
+  const navigate = useNavigate();
   let location = useLocation();
   const activeRoute = (routeName: string) => {
     return location.pathname === routeName;
@@ -76,13 +76,17 @@ const Navbar = () => {
         </div>
         <div className='mobile'>
           <i className='fa-solid fa-magnifying-glass' />
-          <i className='fa-regular fa-user' />
+          <i
+            className='fa-regular fa-user'
+            onClick={() => navigate("/auth/sign-up")}
+          />
           <i className='fa-solid fa-bars-staggered' onClick={showDrawer} />
         </div>
         <div className='user'>
           <div className='user__item sign-in'>
             <i className='fa-regular fa-user'></i>
-            <Link to='#'>Login</Link> / <Link to='#'>Register</Link>
+            <Link to='/auth/sign-in'>Login</Link> /{" "}
+            <Link to='/auth/sign-up'>Register</Link>
           </div>
           <div className='user__item search'>
             <i className='fa-solid fa-magnifying-glass'></i>
