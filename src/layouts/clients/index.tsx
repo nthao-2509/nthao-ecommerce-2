@@ -1,3 +1,4 @@
+import Layout404 from "layouts/404";
 import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { ClientRoutes } from "routes/ClientRoutes";
@@ -26,6 +27,7 @@ const ClientLayout = () => {
       <Routes>
         {getRoutes(ClientRoutes)}
         <Route path='/' element={<Navigate to='/' replace />} />
+        <Route path='*' element={<Layout404 />} />
       </Routes>
     </div>
   );

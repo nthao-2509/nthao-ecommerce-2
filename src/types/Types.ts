@@ -4,6 +4,7 @@ export type ViewRoutes = {
   icon: JSX.Element | string | undefined;
   path: string;
   secondary?: boolean;
+  layout?: string;
 };
 
 export type TypeRoutes = {
@@ -51,3 +52,52 @@ export type TypeDataTabs = {
   className: string;
   content: TypeDataTabsContent[];
 };
+
+//
+export interface TypeDataUser {
+  address: string;
+  avatar: string;
+  birthDay: string;
+  cccd: string;
+  email: string;
+  fullName: string;
+  id: number;
+  idUser: number;
+  password: string;
+  payment: string;
+  phone: string;
+  role: "user" | "admin";
+  sex: string;
+  username: string;
+}
+
+export interface TypeProduct {
+  key: string;
+  colors: string;
+  description: string;
+  idProduct: string;
+  images: string;
+  nameProduct: string;
+  price: string;
+  price_old: string;
+  size: string;
+  tags: string;
+  trademark: string;
+  slug: string;
+}
+
+export interface TypeCart {
+  cartQuantity: number;
+  key: string;
+  colors: string;
+  description: string;
+  idProduct: string;
+  images: string;
+  nameProduct: string;
+  price: string;
+  price_old: string;
+  size: string;
+  tags: string;
+  trademark: string;
+  slug: string;
+}

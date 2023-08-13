@@ -4,17 +4,11 @@ import {
   StyleLayoutNotification,
   StyleNavbar,
 } from "./style";
-import {
-  Avatar,
-  Badge,
-  Divider,
-  Dropdown,
-  MenuProps,
-  Popover,
-  Space,
-} from "antd";
+import { Avatar, Badge, Divider, Popover } from "antd";
+import { TypeRoutes } from "types/Types";
 
-const Navbar = () => {
+const Navbar = (props: { breadcrumb: { name: string | undefined } }) => {
+  const { breadcrumb } = props;
   const dropdownAccount = (
     <StyleDropdownAccount>
       <li>
@@ -63,7 +57,7 @@ const Navbar = () => {
   return (
     <StyleNavbar>
       <div className='title'>
-        <h1>Dashboard</h1>
+        <h1>{breadcrumb.name}</h1>
       </div>
       <div className='left'>
         <Popover

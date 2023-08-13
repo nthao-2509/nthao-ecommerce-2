@@ -1,17 +1,74 @@
 import React from "react";
 import { StyleSignIn } from "./style";
-import { Button, Divider, Form, Input } from "antd";
-import { Link, useLocation } from "react-router-dom";
+import { Form, Input, message } from "antd";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "store";
+import { login, logout, register, reset } from "features/auth/AuthSlice";
+
+interface Values {
+  email: string;
+  password: string;
+  fullName: string;
+  username: string;
+}
 
 const SignIn = () => {
   const [isSignIn, setIsSignIn] = React.useState<boolean>(true);
+  const [isSubmitted, setSubmitted] = React.useState<boolean>(false);
+  const [isLoadingPages, setIsLoadingPages] = React.useState<boolean>(false);
   const [form] = Form.useForm();
+
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const {
+    user,
+    isLoading,
+    isError,
+    isSuccess,
+    message: messageAuth,
+  } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
+
+  React.useEffect(() => {
+    // localStorage.removeItem("user_login");
+    if (isError) message.error(messageAuth);
+    if (isSuccess || user) {
+      setIsLoadingPages(true);
+      setTimeout(() => {
+        setIsLoadingPages(false);
+      }, 3000);
+    }
+    dispatch(reset());
+  }, [user, isLoading, isError, isSuccess, messageAuth, navigate, dispatch]);
+
   React.useEffect(() => {
     setIsSignIn(location.pathname.split("/")?.[2] === "sign-in");
   }, [setIsSignIn, location]);
 
-  const onSubmit = () => {};
+  const onSubmit = (values: Values) => {
+    setIsLoadingPages(true);
+    dispatch(logout());
+    if (isSignIn) {
+      dispatch(
+        login({
+          username: values.username,
+          password: values.password,
+        })
+      );
+    } else {
+      dispatch(
+        register({
+          username: values.username,
+          password: values.password,
+          email: values.email,
+          fullName: values.fullName,
+          role: "user",
+        })
+      );
+    }
+  };
   return (
     <StyleSignIn>
       <div className='sign-in'>
@@ -45,12 +102,17 @@ const SignIn = () => {
               layout='vertical'
             >
               {!isSignIn && (
-                <Form.Item name={"fullName"} label={"FullName"}>
-                  <Input className='form__input' type='text' />
-                </Form.Item>
+                <>
+                  <Form.Item name={"fullName"} label={"FullName"}>
+                    <Input className='form__input' type='text' />
+                  </Form.Item>
+                  <Form.Item name={"email"} label={"E-Mail Address"}>
+                    <Input className='form__input' type='text' />
+                  </Form.Item>
+                </>
               )}
-              <Form.Item name={"email"} label={"E-mail Address"}>
-                <Input className='form__input' type='email' />
+              <Form.Item name={"username"} label={"Username"}>
+                <Input className='form__input' type='text' />
               </Form.Item>
               <Form.Item name={"password"} label={"Password"}>
                 <Input className='form__input' type='password' />

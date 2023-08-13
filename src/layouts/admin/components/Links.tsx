@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { TypeRoutes, ViewRoutes } from "types/Types";
 
@@ -11,6 +10,7 @@ const SidebarLinks = (props: { routes: TypeRoutes[] }): JSX.Element => {
   };
 
   const createLink = (routes: TypeRoutes[]) => {
+    // eslint-disable-next-line array-callback-return
     return routes?.map((route: TypeRoutes, key: number) => {
       if (
         route.layout === "/admin" ||
@@ -18,7 +18,7 @@ const SidebarLinks = (props: { routes: TypeRoutes[] }): JSX.Element => {
         route.layout === "/rtl"
       ) {
         return (
-          <>
+          <div key={key}>
             <div className='title__routes'>
               <p>{route.title}</p>
             </div>
@@ -36,7 +36,7 @@ const SidebarLinks = (props: { routes: TypeRoutes[] }): JSX.Element => {
                 </div>
               </Link>
             ))}
-          </>
+          </div>
         );
       }
     });

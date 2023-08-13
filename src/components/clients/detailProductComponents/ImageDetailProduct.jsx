@@ -7,9 +7,10 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 
 import { FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { UrlServer } from "config/UrlServer";
 
 // import required modules
-const ImageDetailProduct = () => {
+const ImageDetailProduct = ({ images }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
   return (
@@ -30,9 +31,9 @@ const ImageDetailProduct = () => {
           modules={[FreeMode, Navigation, Thumbs]}
           className='mySwiper2'
         >
-          {Array.from({ length: 2 }).map((item, key) => (
+          {images.map((image, key) => (
             <SwiperSlide>
-              <img src={`/images/detail-${key + 1}.jpg`} alt={`${key}`} />
+              <img src={`${UrlServer}/image/${image}`} alt={`${key}`} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -50,9 +51,9 @@ const ImageDetailProduct = () => {
           modules={[FreeMode, Navigation, Thumbs]}
           className='mySwiper'
         >
-          {Array.from({ length: 2 }).map((item, key) => (
+          {images.map((image, key) => (
             <SwiperSlide>
-              <img src={`/images/detail-${key + 1}.jpg`} alt={`${key}`} />
+              <img src={`${UrlServer}/image/${image}`} alt={`${key}`} />
             </SwiperSlide>
           ))}
         </Swiper>

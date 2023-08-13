@@ -9,12 +9,12 @@ export const DetailProductStyled = styled.div`
       .product {
         &__detail {
           width: 100%;
-          height: 700px;
+          min-height: 800px;
           display: flex;
           align-items: flex-start;
           gap: 30px;
           .left {
-            width: 50%;
+            width: 40%;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -28,6 +28,7 @@ export const DetailProductStyled = styled.div`
                   width: 100%;
                   height: 100%;
                   object-fit: cover;
+                  vertical-align: middle;
                 }
               }
             }
@@ -66,7 +67,7 @@ export const DetailProductStyled = styled.div`
               flex-direction: column;
               gap: 12px;
               padding-bottom: 10px;
-              border-bottom: 1px solid ${Colors.mutedColor};
+              /* border-bottom: 1px solid ${Colors.mutedColor}; */
               .title {
                 h4 {
                   font-size: 20px;
@@ -168,8 +169,7 @@ export const DetailProductStyled = styled.div`
               }
             }
             .bottom {
-              position: absolute;
-              bottom: 20px;
+              margin-top: 30px;
               display: flex;
               align-items: center;
               justify-content: flex-start;

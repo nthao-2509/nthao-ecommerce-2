@@ -1,15 +1,123 @@
+import { Tabs, TabsProps, Tag } from "antd";
 import Colors from "modules/Colors";
 import React from "react";
-import { Link } from "react-router-dom";
+import { TypeProduct } from "types/Types";
+import parse from "html-react-parser";
+import ContentTabDetailProduct from "./contentTabs/ContentTab";
+import { getQueryHelper } from "helpers/queryHelper";
+import { UrlServer } from "config/UrlServer";
+import { useQuery } from "react-query";
+import {
+  CLIENT_QUERY_RETURN_POLICY,
+  CLIENT_QUERY_TERMS_OF_SERVICE,
+} from "config/KeyQuey";
+import { formatter } from "config/numberFormat";
+import { AppDispatch } from "store";
+import { addToCart } from "features/cart/Cart.Slice";
+import { useDispatch } from "react-redux";
+import {
+  addToWishList,
+  removeWishList,
+} from "features/wishlist/WishList.service";
+interface Props {
+  product: TypeProduct;
+  wishlist: boolean;
+}
 
-const InformationProduct = () => {
+const fetchTermsOfService = () => {
+  return getQueryHelper(`${UrlServer}/api/client/select-terms-of-service`);
+};
+const fetchReturnPolicy = () => {
+  return getQueryHelper(`${UrlServer}/api/client/select-return-policy`);
+};
+
+const InformationProduct = ({ product, wishlist }: Props) => {
+  const { nameProduct, price, price_old, tags, colors, description } = product;
   const totalStars = 5;
   const activeStars = 3;
+
+  const dispatch = useDispatch<AppDispatch>();
+
+  const onChange = (key: string) => {
+    console.log(key);
+  };
+
+  const { data: dataTermsOfService, isLoading: isLoadingTermsOfService }: any =
+    useQuery(CLIENT_QUERY_TERMS_OF_SERVICE, () => fetchTermsOfService());
+
+  const { data: dataReturnPolicy, isLoading: isLoadingReturnPolicy }: any =
+    useQuery(CLIENT_QUERY_RETURN_POLICY, () => fetchReturnPolicy());
+
+  const itemsTabs: TabsProps["items"] = [
+    {
+      key: "1",
+      label: `Description`,
+      children: (
+        <ContentTabDetailProduct>
+          <div
+            style={{
+              padding: "20px 0",
+            }}
+          >
+            {parse(description)}
+          </div>
+        </ContentTabDetailProduct>
+      ),
+    },
+    {
+      key: "2",
+      label: `Terms of Service`,
+      children: (
+        <>
+          {!isLoadingTermsOfService && dataTermsOfService?.html && (
+            <ContentTabDetailProduct>
+              <div
+                style={{
+                  padding: "20px 0",
+                }}
+              >
+                {parse(dataTermsOfService?.html)}
+              </div>
+            </ContentTabDetailProduct>
+          )}
+        </>
+      ),
+    },
+    {
+      key: "3",
+      label: `Return Policy`,
+      children: (
+        <>
+          {!isLoadingReturnPolicy && dataReturnPolicy?.html && (
+            <ContentTabDetailProduct>
+              <div
+                style={{
+                  padding: "20px 0",
+                }}
+              >
+                {parse(dataReturnPolicy?.html)}
+              </div>
+            </ContentTabDetailProduct>
+          )}
+        </>
+      ),
+    },
+  ];
+  const handleAddToCart = (product: any) => {
+    dispatch(addToCart(product));
+  };
+  const handleAddToWishList = (product: TypeProduct) => {
+    dispatch(addToWishList(product));
+  };
+  const handleMinusWishList = (product: TypeProduct) => {
+    dispatch(removeWishList(product));
+  };
+
   return (
     <>
       <div className='info'>
         <div className='title'>
-          <h4>Floating Phone</h4>
+          <h4>{nameProduct}</h4>
         </div>
         <div className='rating'>
           <div className='star'>
@@ -46,25 +154,27 @@ const InformationProduct = () => {
           <h6>10 Reviews</h6>
         </div>
         <div className='price'>
-          <del className='font price__old'>$1,999.99</del>
-          <p className='font price__new'>$1,139.33</p>
+          <del className='font price__old'>
+            {formatter.format(Number(price_old))}
+          </del>
+          <p className='font price__new'>{formatter.format(Number(price))}</p>
         </div>
         <div className='tag'>
           <div className='tag__title'>
-            <p>Availability :</p>
+            <p>Tags :</p>
           </div>
           <div className='tag__list'>
-            <Link className='item' to={"#"}>
-              <p>In Stock</p>
-            </Link>
+            {JSON.parse(tags).map((tag: string, key: number) => (
+              <Tag
+                color='processing'
+                style={{
+                  textTransform: "capitalize",
+                }}
+              >
+                {tag}
+              </Tag>
+            ))}
           </div>
-        </div>
-        <div className='description'>
-          <p>
-            Met minim Mollie non desert Alamo est sit cliquey dolor do met sent.
-            RELIT official consequent door ENIM RELIT Mollie. Excitation venial
-            consequent sent nostrum met.
-          </p>
         </div>
       </div>
       <div className='colors'>
@@ -83,12 +193,37 @@ const InformationProduct = () => {
         </ul>
       </div>
       <div className='bottom'>
-        <button>
+        <button onClick={() => handleAddToCart(product)}>
           <i className='fa-solid fa-cart-shopping' /> Add To Cart
         </button>
-        <i className='icon__wishlist fa-regular fa-heart'></i>
+        {!wishlist ? (
+          <i
+            onClick={() => handleAddToWishList(product)}
+            className='icon__wishlist fa-regular fa-heart'
+          ></i>
+        ) : (
+          <i
+            onClick={() => handleMinusWishList(product)}
+            style={{
+              color: "red",
+            }}
+            className='icon__wishlist fa-solid fa-heart-circle-minus'
+          ></i>
+        )}
         {/* <i className='fa-solid fa-cart-shopping'></i> */}
         {/* <i className='fa-regular fa-eye'></i> */}
+      </div>
+      <div
+        style={{
+          marginTop: 20,
+        }}
+      >
+        <Tabs
+          className='tabs'
+          defaultActiveKey='1'
+          items={itemsTabs}
+          onChange={onChange}
+        />
       </div>
     </>
   );

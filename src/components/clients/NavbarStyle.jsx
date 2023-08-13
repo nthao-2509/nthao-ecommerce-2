@@ -189,6 +189,13 @@ export const StyleNavbar = styled.div`
       &__item {
         padding-left: 15px;
         color: #23a6f0;
+        .information {
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          gap: 10px;
+          cursor: pointer;
+        }
         &.cart,
         &.wishlist {
           display: flex;

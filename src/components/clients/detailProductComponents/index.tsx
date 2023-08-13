@@ -4,51 +4,32 @@ import { DetailProductStyled } from "./styles/style";
 import Brands from "../Brands";
 import ImageDetailProduct from "./ImageDetailProduct";
 import InformationProduct from "./InformationProduct";
-import { Tabs, TabsProps } from "antd";
-import Description from "./contentTabs/Description";
-import Information from "./contentTabs/Information";
-import Review from "./contentTabs/Review";
-import ContentTabs from "./contentTabs";
-import {
-  DataContentTabs_Description,
-  DataContentTabs_Information,
-} from "modules/data-fake";
 import Colors from "modules/Colors";
 import BestsellerProduct from "../BestsellerProduct";
 import Bandage from "../homeComponents/Bandage";
+import { useLocation } from "react-router-dom";
+import { TypeProduct } from "types/Types";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
+import _ from "lodash";
+import Layout404 from "layouts/404";
 
 const DetailProduct = () => {
-  const onChange = (key: string) => {
-    console.log(key);
-  };
-  const items: TabsProps["items"] = [
-    {
-      key: "1",
-      label: `Description`,
-      children: <ContentTabs dataContent={DataContentTabs_Description} />,
-    },
-    {
-      key: "2",
-      label: `Additional Information`,
-      children: <ContentTabs dataContent={DataContentTabs_Information} />,
-    },
-    // {
-    //   key: "3",
-    //   label: (
-    //     <div>
-    //       <span>Reviews</span>{" "}
-    //       <span
-    //         style={{
-    //           color: Colors.primaryColor,
-    //         }}
-    //       >
-    //         ̣(0)
-    //       </span>
-    //     </div>
-    //   ),
-    //   children: <Review />,
-    // },
-  ];
+  const location = useLocation();
+  const {
+    wishListItem,
+  }: {
+    wishListItem: TypeProduct[];
+  } = useSelector((state: RootState) => state.wishList);
+  if (!location?.state?.product) return <Layout404 />;
+  const {
+    state: { product },
+  }: {
+    state: {
+      product: TypeProduct;
+    };
+  } = location;
+
   return (
     <DetailProductStyled>
       <div className='container'>
@@ -57,32 +38,28 @@ const DetailProduct = () => {
             breadcrumb={[
               { text: "Home", href: "/" },
               { text: "Shop", href: "/shop" },
-              { text: "Product Name", href: undefined },
+              { text: product.nameProduct, href: undefined },
             ]}
           />
           {/* content */}
           <div className='content'>
             <div className='product__detail'>
               <div className='left'>
-                <ImageDetailProduct />
+                <ImageDetailProduct images={JSON.parse(product.images)} />
               </div>
               <div className='right'>
-                <InformationProduct />
+                <InformationProduct
+                  product={product}
+                  wishlist={_.some(wishListItem, {
+                    idProduct: product.idProduct,
+                  })}
+                />
               </div>
             </div>
           </div>
         </Container>
       </div>
-      <div className='description'>
-        <Container>
-          <Tabs
-            className='tabs'
-            defaultActiveKey='1'
-            items={items}
-            onChange={onChange}
-          />
-        </Container>
-      </div>
+      <div className='description'></div>
       <div className='bestseller'></div>
       <BestsellerProduct />
       <Brands backgroundColor={Colors.lightGray1} />
